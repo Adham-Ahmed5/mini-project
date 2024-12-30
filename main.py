@@ -1,18 +1,12 @@
-first_number = input()
-second_number = input()
+import math
 
-first_number=int(first_number)
-second_number=int(second_number)
+radius = int(input())
+#second_number = input()
 
-sum=first_number+second_number
-print(sum)
+circumference=2*math.pi*radius
+area=math.pi*radius*radius
 
-subtraction=first_number-second_number
-print(subtraction)
+print(circumference)
+print(area)
 
-multiplication=first_number*second_number
-print(multiplication)
-
-division=first_number/second_number
-print(division)
 
