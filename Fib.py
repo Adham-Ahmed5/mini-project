@@ -1,32 +1,31 @@
-def calculate_factorial(n):
-    # Initialize result to 1 (since factorial of 0 is 1)
-    result = 1
-    
-    # Loop from 1 to n (inclusive) to calculate the factorial
-    for i in range(1, n + 1):
-        result *= i  # Multiply result by the current number i
-    
-    return result
+def is_prime(n):
+    # A prime number is greater than 1 and divisible only by 1 and itself
+    if n <= 1:
+        return False  # Numbers less than or equal to 1 are not prime
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:  # If n is divisible by any number other than 1 and itself
+            return False
+    return True
 
 def main():
-    # Take user input for the number
+    # Take user input
     while True:
         try:
-            number = int(input("Enter a number to calculate its factorial: "))
-            if number < 0:
-                print("Please enter a non-negative integer.")
+            num = int(input("Enter a number to find prime numbers up to that number: "))
+            if num < 2:
+                print("Please enter a number greater than or equal to 2.")
                 continue
-            break  # Exit loop if input is valid
+            break
         except ValueError:
             print("Invalid input! Please enter a valid integer.")
     
-    # Calculate the factorial using the function
-    factorial = calculate_factorial(number)
+    print(f"Prime numbers up to {num}:")
     
-    # Print the result
-    print(f"The factorial of {number} is: {factorial}")
+    # Loop through all numbers from 2 to the user's number and print primes
+    for i in range(2, num + 1):
+        if is_prime(i):
+            print(i, end=" ")
 
 # Run the program
 if __name__ == "__main__":
     main()
-
