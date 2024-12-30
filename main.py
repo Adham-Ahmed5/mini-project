@@ -1,6 +1,18 @@
-start_year = input()
-end_year = input()
-start_year=int(start_year)
-end_year=int(end_year)
-age=end_year-start_year
-print (age)
+first_number = input()
+second_number = input()
+
+first_number=int(first_number)
+second_number=int(second_number)
+
+sum=first_number+second_number
+print(sum)
+
+subtraction=first_number-second_number
+print(subtraction)
+
+multiplication=first_number*second_number
+print(multiplication)
+
+division=first_number/second_number
+print(division)
+
