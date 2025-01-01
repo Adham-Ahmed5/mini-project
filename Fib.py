@@ -1,28 +1,15 @@
-import random
+def factorial(n):
+    # Base condition: When n is 1 or 0, return 1
+    if n == 0 or n == 1:
+        return 1
+    # Recursive return: n * factorial of (n-1)
+    else:
+        return n * factorial(n - 1)
 
-def insertion_sort(arr):
-    """
-    Sorts an array using the insertion sort algorithm.
+def main():
+    number = int(input("Enter a number to calculate its factorial: "))
+    result = factorial(number)
+    print(f"The factorial of {number} is: {result}")
 
-    Args:
-      arr: The list of numbers to be sorted.
-
-    Returns:
-      The sorted list.
-    """
-    for i in range(1, len(arr)):
-        key = arr[i]
-        j = i - 1
-        while j >= 0 and key < arr[j]:
-            arr[j + 1] = arr[j]
-            j -= 1
-        arr[j + 1] = key
-    return arr
-
-# Create a random list of numbers
-data = [random.randint(1, 100) for _ in range(10)] 
-print("Unsorted List:", data)
-
-# Sort the list using insertion sort
-sorted_data = insertion_sort(data)
-print("Sorted List:", sorted_data)
+# Call the main function to run the program
+main()
