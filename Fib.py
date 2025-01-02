@@ -1,22 +1,13 @@
-def fibonacci(n):
-    # Base cases: fibonacci(0) = 0 and fibonacci(1) = 1
-    if n == 0:
+def calculate_average(numbers):
+    # Check if the list is empty to avoid division by zero
+    if len(numbers) == 0:
         return 0
-    elif n == 1:
-        return 1
-    # Recursive call: fibonacci(n) = fibonacci(n-1) + fibonacci(n-2)
-    else:
-        return fibonacci(n - 1) + fibonacci(n - 2)
+    # Calculate the sum of the list
+    total_sum = sum(numbers)
+    # Calculate the average by dividing the sum by the length of the list
+    average = total_sum / len(numbers)
+    return average
 
-def main():
-    # Input from the user to calculate the nth Fibonacci number
-    number = int(input("Enter the Fibonacci sequence index: "))
-    
-    # Calculate the Fibonacci number
-    result = fibonacci(number)
-    
-    # Print the result
-    print(f"The Fibonacci number at index {number} is: {result}")
-
-# Call the main function to run the program
-main()
+# Example usage:
+numbers = [10, 20, 30, 40, 50]
+print(f"The average is: {calculate_average(numbers)}")
