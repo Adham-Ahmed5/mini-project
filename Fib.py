@@ -1,94 +1,79 @@
-class Book:
-    def __init__(self, title, author, availability=True):
-        """Initialize the book with title, author, and availability status."""
-        self.title = title
-        self.author = author
-        self.availability = availability
+class Product:
+    def __init__(self, name, price, quantity):
+        """Initialize the product with name, price, and quantity."""
+        self.name = name
+        self.price = price
+        self.quantity = quantity
 
     def display_info(self):
-        """Display the information about the book."""
-        availability_status = "Available" if self.availability else "Checked Out"
-        print(f"Title: {self.title}")
-        print(f"Author: {self.author}")
-        print(f"Status: {availability_status}")
+        """Display the information about the product."""
+        print(f"Product Name: {self.name}")
+        print(f"Price: ${self.price:.2f}")
+        print(f"Available Quantity: {self.quantity}")
     
-    def check_out(self):
-        """Check out the book (change its status to checked out)."""
-        if self.availability:
-            self.availability = False
-            print(f"The book '{self.title}' has been checked out.")
-        else:
-            print(f"Sorry, the book '{self.title}' is already checked out.")
+    def update_quantity(self, quantity_change):
+        """Update the quantity of the product (sold or restocked)."""
+        self.quantity += quantity_change
+        if self.quantity < 0:
+            self.quantity = 0
+        print(f"Updated Quantity for {self.name}: {self.quantity}")
     
-    def return_book(self):
-        """Return the book (change its status back to available)."""
-        if not self.availability:
-            self.availability = True
-            print(f"The book '{self.title}' has been returned and is now available.")
-        else:
-            print(f"The book '{self.title}' is already available.")
+    def get_value(self):
+        """Calculate and return the value of this product in the inventory."""
+        return self.price * self.quantity
 
 
-class LibraryCatalogue:
+class Inventory:
     def __init__(self):
-        """Initialize the library catalogue (a list to store books)."""
-        self.books = []
+        """Initialize the inventory with an empty list of products."""
+        self.products = []
 
-    def add_book(self, title, author):
-        """Add a new book to the catalogue."""
-        new_book = Book(title, author)
-        self.books.append(new_book)
-        print(f"Book '{title}' by {author} added to the catalogue.")
-    
-    def display_all_books(self):
-        """Display all books in the catalogue."""
-        if self.books:
-            print("\nLibrary Catalogue:")
-            for book in self.books:
-                book.display_info()
+    def add_product(self, name, price, quantity):
+        """Add a new product to the inventory."""
+        new_product = Product(name, price, quantity)
+        self.products.append(new_product)
+        print(f"Product '{name}' added to the inventory.")
+
+    def display_all_products(self):
+        """Display all products in the inventory."""
+        if self.products:
+            print("\nInventory List:")
+            for product in self.products:
+                product.display_info()
                 print("-" * 30)
         else:
-            print("The catalogue is empty.")
-    
-    def find_book(self, title):
-        """Find a book by its title in the catalogue."""
-        for book in self.books:
-            if book.title.lower() == title.lower():
-                return book
-        return None
+            print("The inventory is empty.")
+
+    def total_inventory_value(self):
+        """Calculate and display the total value of the inventory."""
+        total_value = sum(product.get_value() for product in self.products)
+        print(f"\nTotal Inventory Value: ${total_value:.2f}")
 
 
 # Simple scenario of using the system
 
 def main():
-    # Create the library catalogue system
-    catalogue = LibraryCatalogue()
+    # Create the inventory system
+    inventory = Inventory()
     
-    # Add some books to the catalogue
-    catalogue.add_book("To Kill a Mockingbird", "Harper Lee")
-    catalogue.add_book("1984", "George Orwell")
-    catalogue.add_book("The Great Gatsby", "F. Scott Fitzgerald")
+    # Add some products to the inventory
+    inventory.add_product("Laptop", 1000.00, 10)
+    inventory.add_product("Smartphone", 500.00, 25)
+    inventory.add_product("Headphones", 150.00, 50)
     
-    # Display all books in the catalogue
-    catalogue.display_all_books()
+    # Display all products in the inventory
+    inventory.display_all_products()
     
-    # Check out a book
-    book_to_check_out = catalogue.find_book("1984")
-    if book_to_check_out:
-        book_to_check_out.check_out()
-    else:
-        print("Book not found in the catalogue.")
+    # Update quantity (sold and restocked)
+    print("\nUpdating quantities:")
+    inventory.products[0].update_quantity(-2)  # Sold 2 laptops
+    inventory.products[1].update_quantity(10)  # Restocked 10 smartphones
     
-    # Try to check out the same book again
-    if book_to_check_out:
-        book_to_check_out.check_out()
-
-    # Return the book
-    if book_to_check_out:
-        book_to_check_out.return_book()
-
-    # Display all books after returning a book
-    catalogue.display_all_books()
+    # Display updated inventory
+    inventory.display_all_products()
+    
+    # Calculate and display total inventory value
+    inventory.total_inventory_value()
 
 if __name__ == "__main__":
     main()
