@@ -1,14 +1,14 @@
 import os
 
-# File where grades will be stored
-GRADE_FILE = "grades.txt"
+# File where tasks will be stored
+TASKS_FILE = "tasks.txt"
 
-# Function to check if the grade file exists, and create it if necessary
+# Function to check if the task file exists, create if it doesn't
 def check_file():
     try:
         # Create the file if it doesn't exist
-        if not os.path.exists(GRADE_FILE):
-            with open(GRADE_FILE, 'w'):  # Open file in write mode to create it
+        if not os.path.exists(TASKS_FILE):
+            with open(TASKS_FILE, 'w'):  # Open file in write mode to create it
                 pass
         return True
     except PermissionError:
@@ -18,86 +18,91 @@ def check_file():
         print(f"An unexpected error occurred: {e}")
         return False
 
-# Function to input and store grades
-def input_grades():
-    grades = []
-    while True:
-        try:
-            subject = input("\nEnter subject name (or type 'done' to finish): ")
-            if subject.lower() == 'done':
-                break
-            grade = input(f"Enter grade for {subject}: ")
-            
-            # Validate if the grade is a valid numeric input
-            grade = float(grade)  # Try converting to a float to ensure it's numeric
-            if grade < 0 or grade > 100:
-                print("Please enter a grade between 0 and 100.")
-                continue
-            grades.append((subject, grade))
-            
-        except ValueError:
-            print("Invalid input. Please enter a numeric grade.")
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-
-    # Save grades to file
+# Function to add a task to the list
+def add_task(task):
     try:
         if check_file():
-            with open(GRADE_FILE, 'a') as file:
-                for subject, grade in grades:
-                    file.write(f"{subject}: {grade}\n")
-            print("\nGrades saved successfully.")
+            with open(TASKS_FILE, 'a') as file:
+                file.write(f"{task}\n")
+            print(f"Task '{task}' added successfully.")
     except Exception as e:
-        print(f"Error saving grades to file: {e}")
+        print(f"Error saving task to file: {e}")
 
-# Function to read grades from file and calculate average
-def calculate_average():
+# Function to remove a completed task from the list
+def remove_task(task):
     try:
         if check_file():
-            with open(GRADE_FILE, 'r') as file:
+            with open(TASKS_FILE, 'r') as file:
                 lines = file.readlines()
-                if not lines:
-                    print("No grades found in the file.")
-                    return
-                
-                grades = []
-                for line in lines:
-                    try:
-                        subject, grade = line.split(":")
-                        grade = float(grade.strip())
-                        grades.append(grade)
-                    except ValueError:
-                        print(f"Skipping invalid entry: {line.strip()}")
-                
-                if grades:
-                    average = sum(grades) / len(grades)
-                    print(f"\nYour average grade is: {average:.2f}")
-                else:
-                    print("No valid grades found to calculate an average.")
+            
+            if task + "\n" in lines:
+                lines.remove(task + "\n")
+                with open(TASKS_FILE, 'w') as file:
+                    file.writelines(lines)
+                print(f"Task '{task}' removed successfully.")
+            else:
+                print(f"Task '{task}' not found in the list.")
     except FileNotFoundError:
-        print("Grade file not found.")
+        print("Task file not found.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-# Function to show the main menu and interact with the user
-def show_menu():
+# Function to view the current task list
+def view_tasks():
+    try:
+        if check_file():
+            with open(TASKS_FILE, 'r') as file:
+                tasks = file.readlines()
+                if tasks:
+                    print("\nCurrent Task List:")
+                    for task in tasks:
+                        print(f"- {task.strip()}")
+                else:
+                    print("No tasks in the list.")
+    except FileNotFoundError:
+        print("Task file not found.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+# Function to load tasks from the file
+def load_tasks():
+    tasks = []
+    try:
+        if check_file():
+            with open(TASKS_FILE, 'r') as file:
+                tasks = file.readlines()
+            return [task.strip() for task in tasks]
+    except FileNotFoundError:
+        print("Task file not found.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    return tasks
+
+# Main function to run the task manager
+def main():
     while True:
-        print("\nStudent Grade Tracker")
-        print("1. Input and store grades")
-        print("2. Calculate and display average grade")
-        print("3. Exit")
-        choice = input("Choose an option (1/2/3): ").strip()
+        print("\nTask List Manager")
+        print("1. Add a new task")
+        print("2. Remove a completed task")
+        print("3. View current task list")
+        print("4. Exit")
+        
+        choice = input("Choose an option (1/2/3/4): ").strip()
         
         if choice == '1':
-            input_grades()
+            task = input("Enter the task to add: ").strip()
+            add_task(task)
         elif choice == '2':
-            calculate_average()
+            task = input("Enter the task to remove: ").strip()
+            remove_task(task)
         elif choice == '3':
-            print("Goodbye!")
+            view_tasks()
+        elif choice == '4':
+            print("Exiting Task List Manager. Goodbye!")
             break
         else:
             print("Invalid choice. Please try again.")
 
-# Main function to run the grade tracker application
+# Run the program
 if __name__ == "__main__":
-    show_menu()
+    main()
