@@ -1,14 +1,15 @@
 import os
 from datetime import datetime
 
-# File name to store diary entries
+# File where diary entries are saved
 DIARY_FILE = "diary.txt"
 
-# Function to handle exceptions and check if file exists
+# Function to check if the diary file exists, and create it if necessary
 def check_file():
     try:
+        # Create the file if it doesn't exist
         if not os.path.exists(DIARY_FILE):
-            with open(DIARY_FILE, 'w'):  # Create the file if it doesn't exist
+            with open(DIARY_FILE, 'w'):  # Open file in write mode to create it
                 pass
         return True
     except PermissionError:
@@ -20,9 +21,9 @@ def check_file():
 
 # Function to add a new diary entry
 def add_entry():
-    print("Add a new diary entry. Type 'exit' to stop.")
+    print("\nAdd a new diary entry. Type 'exit' to stop.")
     
-    # Get the current timestamp
+    # Option to add timestamp to the entry
     timestamp = input("Would you like to add a timestamp to your entry? (y/n): ").strip().lower()
     timestamp_str = ""
     if timestamp == 'y':
@@ -36,7 +37,7 @@ def add_entry():
             break
         entry += line + "\n"
     
-    # Add timestamp and save entry to the file
+    # Add timestamp (if chosen) and save entry to the file
     try:
         with open(DIARY_FILE, 'a') as file:
             file.write(f"{timestamp_str}{entry}\n")
@@ -60,7 +61,7 @@ def view_entries():
     except Exception as e:
         print(f"Error reading entries: {e}")
 
-# Function to show the main menu
+# Function to show the main menu and interact with the user
 def show_menu():
     while True:
         print("\nPersonal Diary Application")
@@ -79,6 +80,6 @@ def show_menu():
         else:
             print("Invalid choice. Please try again.")
 
-# Run the diary application
+# Main function to run the diary application
 if __name__ == "__main__":
     show_menu()
